@@ -1,0 +1,39 @@
+#!/bin/bash
+
+DIR=/jekyll
+LOG=$DIR/_jekyll_build.log-$(date "+%s")
+
+
+cd $DIR
+echo "> fetching..." > $LOG
+git fetch >> $LOG 2>&1
+
+echo "" >> $LOG
+echo "> fetched ... checking for updated" >> $LOG
+echo "" >> $LOG
+git status | grep behind >> $LOG
+stat=$?
+
+echo "" >> $LOG
+echo "> updates: $stat" >> $LOG
+
+if [ $stat -eq 0 ] || [ "$1" = "-f" ]
+then
+        echo "> need to pull..." >> $LOG
+        echo "" >> $LOG
+        git pull > /dev/null
+        echo "" >> $LOG
+        echo "> pulled ... now rebuilding site" >> $LOG
+        echo "" >> $LOG
+
+        /usr/local/bin/jekyll build >> $LOG
+        echo "" >> $LOG
+        echo "> everythings done. writing mail..." >> $LOG
+        echo "" >> $LOG
+
+        echo "go to https://binfalse.de" >> $LOG
+
+        cat $LOG
+fi
+
+
