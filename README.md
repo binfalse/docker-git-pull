@@ -1,4 +1,4 @@
-# Docker: Jekull w/ Git
+# Docker: Jekyll w/ Git
 
 A Docker image that is able to compile jekyll pages stored in Git repositories at, e.g., GitHub.
 
