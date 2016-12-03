@@ -34,6 +34,9 @@ then
         echo "go to https://binfalse.de" >> $LOG
 
         cat $LOG
+else
+        rm $LOG
 fi
+
 
 
