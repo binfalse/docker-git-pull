@@ -11,9 +11,9 @@ It basically consists of a [Debian image](https://hub.docker.com/_/debian/) plus
 * ruby-dev
 * pygments
 * jekyll including the plugins
- * [jekyll-paginate](https://jekyllrb.com/docs/pagination/)
- * [jekyll-sitemap](https://github.com/jekyll/jekyll-sitemap)
- * [jekyll-minifier](https://github.com/digitalsparky/jekyll-minifier/issues)
+    * [jekyll-paginate](https://jekyllrb.com/docs/pagination/)
+    * [jekyll-sitemap](https://github.com/jekyll/jekyll-sitemap)
+    * [jekyll-minifier](https://github.com/digitalsparky/jekyll-minifier/issues)
 
 In addition, it has a volume `/jekyll` configured, where your jekyll porject should be mounted.
 
