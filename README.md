@@ -25,9 +25,13 @@ In case of updates on the remote repository, the container will integrate new co
 to rebuild the website.
 
 
-As you see, it's specifically entailed for my needs, but maybe other may learn from it.
-In case of questions and doubts [just contact me](https://binfalse.de/contact/).. :)
+Let's assume your Jekyll/Git project is located in `/path/to/project`.
+Then you just need to mount that path to `/jekyll` and run a container as follows:
 
+    docker run --rm -v /path/to/project:/jekyll binfalse/jekyll-git
+
+
+In case of questions and doubts [just contact me](https://binfalse.de/contact/).. :)
 
 ## LICENSE
 
