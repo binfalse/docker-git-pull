@@ -1,4 +1,4 @@
-# This file is part of the Docker Image for Jekyll+Git.
+# This file is part of the Docker Image for a Docker:Git-Pull.
 # Copyright (C) 2017 Martin Scharm <https://binfalse.de/contact/>
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-FROM binfalse/jekyll
+FROM debian:testing-slim
 MAINTAINER martin scharm
 
 # doing all in once to get rid of the useless stuff
@@ -25,8 +25,8 @@ RUN apt-get update \
  && rm -r /var/lib/apt/lists/* /var/cache/*
 
 
-VOLUME ["/jekyll"]
-WORKDIR /jekyll
+VOLUME ["/git-project"]
+WORKDIR /git-project
 
-COPY jekyll-update /usr/local/bin/jekyll-update
-ENTRYPOINT ["/usr/local/bin/jekyll-update"]
+COPY git-pull /usr/local/bin/git-pull
+ENTRYPOINT ["/usr/local/bin/git-pull"]

@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file is part of the Docker Image for Jekyll+Git.
+# This file is part of the Docker Image for a Docker:Git-Pull.
 # Copyright (C) 2017 Martin Scharm <https://binfalse.de/contact/>
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-DIR=/jekyll
-LOG=$DIR/_jekyll_build.log-$(date "+%s")
+DIR=/git-project
+LOG=/tmp/_git-pull.log-$(date "+%s")
+
+PRE_PULL=/pre-pull
+POST_PULL=/post-pull
 
 
 cd $DIR
@@ -36,19 +39,34 @@ if [ $stat -eq 0 ] || [ "$1" = "-f" ]
 then
         echo "> need to pull..." >> $LOG
         echo "" >> $LOG
-        git pull > /dev/null
+
+        if [ -x "$PRE_PULL" ]
+        then
+            echo "> running pre-pull script" >> $LOG
+            $PRE_PULL >> $LOG 2>&1
+        fi
+
+        echo "> pulling..." >> $LOG
         echo "" >> $LOG
-        echo "> pulled ... now rebuilding site" >> $LOG
+        git pull >> $LOG 2>&1
+        echo "" >> $LOG
+        echo "> pulled..." >> $LOG
         echo "" >> $LOG
 
-        /usr/local/bin/jekyll build >> $LOG
+        if [ -x "$POST_PULL" ]
+        then
+            echo "> running post-pull script" >> $LOG
+            $POST_PULL >> $LOG 2>&1
+        fi
+
         echo "" >> $LOG
-        echo "> everythings done. writing mail..." >> $LOG
+        echo "> everything's done. printing log for mail or something..." >> $LOG
         echo "" >> $LOG
 
-        echo "go to https://binfalse.de" >> $LOG
+        echo "done" >> $LOG
 
         cat $LOG
+        rm $LOG
 else
         rm $LOG
 fi

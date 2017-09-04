@@ -1,41 +1,35 @@
-# Docker: Jekyll w/ Git
+# Docker:Git-Pull
 
-A Docker image that is able to compile jekyll pages stored in Git repositories at, e.g., GitHub.
+A Docker image helps you keeping Git-Projects up-to-date.
+Just mount your Project into the container and latest changes will be pulled automatically.
+You can optionally mount scripts that will be run before or after a pull.
+
 
 ## What it does
 
-The [Dockerfile](https://github.com/binfalse/docker-jekyll-git/blob/master/Dockerfile) compiles into a Docker image that is based on my other [Docker image binfalse/jekyll](https://hub.docker.com/r/binfalse/jekyll/) ([source](https://github.com/binfalse/docker-jekyll)).
-It basically consists of a [Debian image](https://hub.docker.com/_/debian/) plus
+The [Dockerfile](https://github.com/binfalse/docker-git-pull/blob/master/Dockerfile) compiles into a Docker image that is based on a [slim version of Debian's testing image](https://hub.docker.com/_/debian/).
+In addition, it has Git installed.
 
-* git
-* ruby-dev
-* pygments
-* jekyll including the plugins
-    * [jekyll-paginate](https://jekyllrb.com/docs/pagination/)
-    * [jekyll-sitemap](https://github.com/jekyll/jekyll-sitemap)
-    * [jekyll-minifier](https://github.com/digitalsparky/jekyll-minifier/issues)
+The image defines a volumn `/git-project`, where your Git porject should be mounted.
+Thus a typical command line call would look like:
 
-In addition, it has a volume `/jekyll` configured, where your jekyll porject should be mounted.
+    docker run --rm -v /path/to/project:/git-project binfalse/git-pull
 
-When run, the container executes the script [jekyll-update](https://github.com/binfalse/docker-jekyll-git/blob/master/jekyll-update), which checks whether the git repository inside the jekyll project is up-to-date (it tries to git-fetch new commits, so make sure you configured an origin with an HTTP(S) URL).
-In case of updates on the remote repository, the container will integrate new commits and run 
-
-    jekull build
-
-to rebuild the website.
+When you run such a container, it will run the script [git-pull](https://github.com/binfalse/docker-git-pull/blob/master/git-pull).
+This script tries to update the project mounted at `/git-project`.
 
 
-Let's assume your Jekyll/Git project is located in `/path/to/project`.
-Then you just need to mount that path to `/jekyll` and run a container as follows:
+You can also mount two optional scripts to setup the environment before/after a pull:
 
-    docker run --rm -v /path/to/project:/jekyll binfalse/jekyll-git
+* `/pre-pull` will be run if `git fetch` indicates new commits on the remote, but before `git pull` is executed
+* `/post-pull` will be run after a `git pull`
 
 
 In case of questions and doubts [just contact me](https://binfalse.de/contact/).. :)
 
 ## LICENSE
 
-	Docker Image for Jekyll+Git
+	Docker Image for a Docker:Git-Pull.
 	Copyright (C) 2009-2017 Martin Scharm <https://binfalse.de/contact/>
 
 	This program is free software: you can redistribute it and/or modify
