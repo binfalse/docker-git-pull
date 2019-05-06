@@ -25,6 +25,47 @@ You can also mount two optional scripts to setup the environment before/after a 
 * `/post-pull` will be run after a `git pull`
 
 
+### Pulling from SSH repositories
+
+This image allows to pull through SSH, but this needs a bit more action.
+You need to mount a properly configured SSH directory into root's home in the container.
+This directory needs:
+
+1. a password-less SSH key
+2. a `known_hosts` file, that has already seen the remote host
+
+To create such an SSH directory, you could do the following:
+
+1. Create an empty directory:
+
+    mkdir /PATH/TO/SSHDIR
+
+2. Spawn a shell in a container with the dir mounted to /root/.ssh:
+
+    docker run --rm -it -v /path/to/project:/git-project -v /PATH/TO/SSHDIR:/root/.ssh --entrypoint /bin/bash binfalse/git-pull
+
+3. Create an SSH-Deploy key
+
+    ssh-keygen -b 4096
+
+4. Just leave all the questions empty (no passphrase!)
+
+5. Configure your repository to allow read access for your new key `/PATH/TO/SSHDIR/id_rsa.pub` (or `/root/.ssh/id_rsa.pub` from within the container)
+
+6. From the spawned container run `git pull` and accept the fingerprint of the remote server
+
+
+
+
+
+Having this `/PATH/TO/SSHDIR` setup properly, you can now run:
+
+    docker run --rm -v /path/to/project:/git-project -v /PATH/TO/SSHDIR:/root/.ssh binfalse/git-pull
+
+to update the repository :)
+
+
+
 In case of questions and doubts [just contact me](https://binfalse.de/contact/).. :)
 
 ## LICENSE
